@@ -43,6 +43,7 @@ https://jasonwatmore.com/next-js-13-mysql-user-registration-and-login-tutorial-w
 
 
 # Docker stuff
+```
 docker pull mysql
 docker run --name mysql -e MYSQL_ROOT_PASSWORD=myadmin -d mysql:latest
 mysql -u root mysql -p <myadmin>
@@ -50,3 +51,4 @@ show databases;
 create database sebas;
 use sebas;
 mysql -u root sebas -p <myadmin>
+```
