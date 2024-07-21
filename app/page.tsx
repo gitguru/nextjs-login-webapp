@@ -1,24 +1,21 @@
 'use client';
 import Image from "next/image";
-import { useParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import { ErrorAlert } from "@/components/error-alert";
 
 export default function Home() {
     const router = useRouter();
-    const params = useParams();
+    const params = useSearchParams();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { callbackUrl } = params;
+    const callbackUrl = params.get('callbackUrl') || ''
 
     const decodeCallbackUrl = (url: string | string[] | undefined):string => {
-      if (undefined === url) {
-        return '/';
-      }
-      if (url && url.length) {
-        return decodeURI(url[0]);
+      if (!url) {
+        return '/sisfact';
       }
       return decodeURI(url as string)
     }
@@ -31,7 +28,7 @@ export default function Home() {
           callbackUrl: decodeCallbackUrl(callbackUrl) ?? "/",
           redirect: false,
         });
-        console.log('signin', result);
+
         if (result?.error) {
           setError(result.error);
         } else if (result?.ok) {
@@ -64,14 +61,12 @@ export default function Home() {
                         <input type="password" id="password" placeholder="Contraseña" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                           value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
-    
+
                     <input type="submit" value="Ingresar" className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8" />
                 </form>
 
                 <ErrorAlert error={error} setError={setError} />
-        </div>
-
-      
+      </div>
 
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-2 lg:text-center">
         <a href="/ayuda"
@@ -85,8 +80,6 @@ export default function Home() {
         >
           Contacto
         </a>
-
-        
 
       </div>
     </main>

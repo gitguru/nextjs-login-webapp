@@ -1,8 +1,19 @@
 use sebas;
 select * from deleteme;
-create table usuarios(id int primary key auto_increment,usuario varchar(50),contrasena varchar(50),tipo int);
+create table usuarios(
+    id int primary key auto_increment,
+    usuario varchar(50),
+    contrasena varchar(50),
+    tipo int,
+    nombre varchar(100)
+);
+
+insert into usuarios(usuario,contrasena,tipo,nombre) values ("sbtl","12345",1,'Sebastian Lopez');
+insert into usuarios(usuario,contrasena,tipo,nombre) values ("sidar","12345",2, 'Sidar LC');
+
 select * from usuarios;
 drop table usuarios;
+
 
 
 create table personal(id int primary key auto_increment,nombre varchar(50),apellido1 varchar(50),
@@ -13,8 +24,6 @@ show tables;
 create table bitacora(id int primary key auto_increment,ingreso varchar(50), hora varchar(50), 
 fecha date, usuario varchar(50),intentos int);
 
-insert into usuarios(usuario,contrasena,tipo) values ("sbtl","12345",1);
-insert into usuarios(usuario,contrasena,tipo) values ("sidar","12345",2);
 
 create table inventario(id int primary key auto_increment, sandalias int, talla varchar(15),
  precio_compra int, precio_venta int, zapatos int, botas int);

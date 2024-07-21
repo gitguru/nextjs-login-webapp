@@ -6,8 +6,8 @@ import Providers from './providers'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SisFact",
-  description: "Sistema de Facturación",
+  title: 'Sistema de Facturación',
+  description: 'Sisfact by Sebastián López',
 };
 
 export default function RootLayout({
@@ -16,8 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}><Providers>{children}</Providers></body>
+    <html lang="en" className="h-full bg-gray-100">
+      {/* <body className={inter.className}> */}
+      <body className="h-full">
+        <Providers>{children}</Providers>        
+      </body>
     </html>
   );
 }
