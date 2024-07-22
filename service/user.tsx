@@ -1,5 +1,19 @@
 import pool from "@/libs/mysql";
 
+
+const getAll = async () => {
+    try {
+        const db = await pool.getConnection()
+        const query = 'select * from usuarios order by nombre'
+        const [rows, fields] = await db.execute(query, []) as any
+        db.release()
+        
+        return rows
+    } catch (error) {
+        throw error
+    }
+}
+
 const getUser = async (pk: number) => {
     try {
         const db = await pool.getConnection()
@@ -29,4 +43,4 @@ const validateUserCredentials = async (username: string, password: string) => {
     }
 }
 
-export { getUser, validateUserCredentials }
+export { getAll, getUser, validateUserCredentials }

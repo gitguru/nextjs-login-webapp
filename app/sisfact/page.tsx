@@ -45,16 +45,16 @@ const products = [
     // Agregar mas opciones aquí...
 ]
 
-export default function Component() {
+export default function Sisfact() {
     const { data: session, status } = useSession()
-    const [tipoUsuario, setTipoUsuario] = useState(session?.user?.tipo)
+    // const [tipoUsuario, setTipoUsuario] = useState(session?.user?.tipo)
 
     if (status === 'loading') {
         return (<Loading />);
     } else if (status === 'authenticated') {
         // check if we have to redirecto to gerencia
         if (session?.user?.tipo === 1) {
-            redirect('/sisfact/gerencia');
+            // redirect('/sisfact/gerencia');
         }
     }
 

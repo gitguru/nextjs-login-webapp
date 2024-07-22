@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
-import pool from "@/libs/mysql";
+import { getAll } from '@/service/user';
 
 export async function GET() {
     try {
-        const db = await pool.getConnection()
-        const query = 'select * from usuarios'
-        const [rows] = await db.execute(query)
-        db.release()
+        const users = await getAll()
         
-        return NextResponse.json(rows)
+        return NextResponse.json(users)
     } catch (error) {
         return NextResponse.json({
             error: error

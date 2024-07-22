@@ -53,3 +53,7 @@ use sebas;
 
 mysql -u root sebas -p <myadmin>
 ```
+
+# Styles (UI, CSS)
+https://tailwindui.com/components/preview
+https://headlessui.com/react/menu

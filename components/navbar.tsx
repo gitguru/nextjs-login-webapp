@@ -2,14 +2,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react';
-
-const navigation = [
-    { name: 'Menú', href: '/sisfact', current: true },
-    { name: 'Gerencia', href: '/sisfact/gerencia', current: false },
-    { name: 'Compras', href: '/sisfact/compras', current: false },
-    { name: 'Ventas', href: '/sisfact/ventas', current: false },
-    { name: 'Personal', href: '/sisfact/personal', current: false },
-]
+import { usePathname } from 'next/navigation'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -17,10 +10,19 @@ function classNames(...classes) {
 
 export const NavbarComponent = () => {
     const { data: session } = useSession();
+    const pathname = usePathname()
 
+    const navigation = [
+        { name: 'Menú', href: '/sisfact', current: pathname === '/sisfact' },
+        { name: 'Gerencia', href: '/sisfact/gerencia', current: pathname.startsWith('/sisfact/gerencia') },
+        { name: 'Compras', href: '/sisfact/compras', current: pathname.startsWith('/sisfact/compras') },
+        { name: 'Ventas', href: '/sisfact/ventas', current: pathname.startsWith('/sisfact/ventas') },
+        { name: 'Personal', href: '/sisfact/personal', current: pathname.startsWith('/sisfact/personal') },
+    ]
+    
     return (
         <>
-
+            <p>{pathname}</p>
             <Disclosure as="nav" className="bg-gray-800">
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">

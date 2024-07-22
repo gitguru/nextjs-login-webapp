@@ -1,14 +1,47 @@
-import Image from "next/image";
+'use client';
+import { redirect } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { Loading } from '@/components/loading';
+import { NavbarComponent } from '@/components/navbar';
 
-export default function Ayuda() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+const Ventas = () => {
+    const { data: session, status } = useSession({
+        required: true,
+        onUnauthenticated() {
+          redirect('/api/auth/signin');
+        },
+    });
+    
+    if (status === 'loading') {
+      return (<Loading />);
+    } else if (status === 'authenticated') {
+        // if (session?.user?.role === UserRole.SERVICE_ACCOUNT) {
+        if (session?.user?.tipo !== 1) {
+            // console.log('Usuario no pertenece al grupo de gerencia!')
+            // redirect('/sisfact')
+        }
+    }
       
-      <div className="mb-32 grid text-center lg:mb-0  lg:max-w-5xl lg:grid-cols-1 lg:text-left">
-        <p>Bienvenido a ventas</p>
+    return (
+        <>
+            <NavbarComponent />
+            <header className="bg-white shadow">
+                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Ventas</h1>
+                </div>
+            </header>
+            <main>
+                <div className="bg-white">
+                    <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+                        <h2 className="sr-only">Products</h2>
 
-      </div>
-      <a href="/">Ir al inicio</a>
-    </main>
-  );
-}
+                        <span>Contenido aquí</span>
+                    </div>
+                </div>
+
+            </main>
+        </>
+    );
+};
+
+export default Ventas;

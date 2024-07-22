@@ -1,10 +1,8 @@
 'use client';
 import { redirect } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { User } from '@/components/user-component';
 import { Loading } from '@/components/loading';
-// import { UserRole } from '@/libs/types';
-// import { signIn, signOut, useSession } from "next-auth/client"
+import { NavbarComponent } from '@/components/navbar';
 
 const Gerencia = () => {
     const { data: session, status } = useSession({
@@ -18,20 +16,29 @@ const Gerencia = () => {
       return (<Loading />);
     } else if (status === 'authenticated') {
         // if (session?.user?.role === UserRole.SERVICE_ACCOUNT) {
-        if (session?.user?.tipo === 1) {
-            // redirect('/dashboard/api_provider/apis');
-            // hacer algo dependiendo del tipo de usuario
+        if (session?.user?.tipo !== 1) {
+            console.log('Usuario no pertenece al grupo de gerencia!')
+            redirect('/sisfact')
         }
     }
       
     return (
         <>
-            <main className="flex min-h-screen flex-col items-center justify-between px-4">
-                <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-                    <p>Página pricipal de gerencia</p>
-                    <User />
-                    ({ session?.user?.tipo === 1 })
+            <NavbarComponent />
+            <header className="bg-white shadow">
+                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Gerencia</h1>
                 </div>
+            </header>
+            <main>
+                <div className="bg-white">
+                    <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+                        <h2 className="sr-only">Products</h2>
+
+                        <span>Contenido aquí</span>
+                    </div>
+                </div>
+
             </main>
         </>
     );
