@@ -31,7 +31,7 @@ create table inventario(id int primary key auto_increment, sandalias int, talla 
  create table ventas(id int primary key auto_increment,articulo varchar(50), fecha date,
  metodo_pago varchar(50),precio varchar(50),cajero varchar(50), moneda varchar(50), total int);
  
- create table compras(id int primary key auto_increment, articulo varchar(50), cantidad int, precio_compra int, fecha date, talla varchar(15));
+ create table compras(id int primary key auto_increment, articulo varchar(50), cantidad int, precio_compra int, fecha varchar(50), talla varchar(15));
  
  create table informe(id int primary key auto_increment, efectivo int, boucher int, ventas_dia int, metodos_pago varchar(50));
  

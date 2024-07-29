@@ -40,6 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 Ayuda adicional
 https://datalab.medium.com/nextjs-14-json-api-with-mysql-9f635b5ecb1d
 https://jasonwatmore.com/next-js-13-mysql-user-registration-and-login-tutorial-with-example-app
+https://es.stackoverflow.com/questions/417088/insertar-datos-en-la-db-mysql
 
 
 # Docker stuff
