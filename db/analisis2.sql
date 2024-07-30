@@ -21,12 +21,24 @@ apellido2 varchar(50),puesto varchar(50),cedula varchar(50));
 
 show tables;
 
-create table bitacora(id int primary key auto_increment,ingreso varchar(50), hora varchar(50), 
-fecha date, usuario varchar(50),intentos int);
+create table bitacora(
+    id int primary key auto_increment,
+    ingreso varchar(50), 
+    hora varchar(50), 
+    fecha date, 
+    usuario varchar(50),
+    intentos int
+);
 
 
-create table inventario(id int primary key auto_increment, sandalias int, talla varchar(15),
- precio_compra int, precio_venta int, zapatos int, botas int);
+create table inventario(
+    id int primary key auto_increment, 
+    articulo varchar(50),
+    cantidad int,
+    talla varchar(15), 
+    precio_compra int, 
+    precio_venta int
+);
  
  create table ventas(id int primary key auto_increment,articulo varchar(50), fecha date,
  metodo_pago varchar(50),precio varchar(50),cajero varchar(50), moneda varchar(50), total int);

@@ -27,7 +27,7 @@ const getUser = async (pk: number) => {
     }
 }
 
-const validateUserCredentials = async (username: string, password: string) => {
+const validarCredencialesDeUsuario = async (username: string, password: string) => {
     try {
         const db = await pool.getConnection()
         const query = 'select * from usuarios where usuario = ? and contrasena = ?'
@@ -35,12 +35,34 @@ const validateUserCredentials = async (username: string, password: string) => {
         db.release()
 
         if (rows === undefined || rows.length == 0) {
+            // actualizar bitácora
+            agregarABitacora(username, 'INGRESO - FALLIDO')
             throw new Error('Usuario o contraseña incorrectos.')
         }
+
+        // actualizar bitácora
+        agregarABitacora(username, 'INGRESO - VALIDO')
+
+        // retornar los datos del usuario que ha ingresado
         return rows
     } catch (error) {
         throw error
     }
 }
 
-export { getAll, getUser, validateUserCredentials }
+const agregarABitacora = async (username: string, ingreso: string) => {
+    try {
+        const db = await pool.getConnection()
+        const today = new Date()
+        const hora = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+        const fecha = `${today.getFullYear()}-${(today.getMonth()+1)}-${today.getDate()}`
+
+        const query = 'insert into bitacora (ingreso, hora, fecha, usuario) values (?, ?, ?, ?)'
+        const [rows, fields] = await db.execute(query, [ingreso, hora, fecha, username]) as any
+        db.release()
+    } catch (error) {
+        throw error
+    }
+}
+
+export { getAll, getUser, validarCredencialesDeUsuario, agregarABitacora }

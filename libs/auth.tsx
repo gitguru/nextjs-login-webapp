@@ -3,7 +3,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 // import GoogleProvider from "next-auth/providers/google"
 // import EmailProvider from "next-auth/providers/email"
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { validateUserCredentials } from '@/service/user';
+import { validarCredencialesDeUsuario } from '@/service/user';
 import { NEXTAUTH_URL, NEXTAUTH_SECRET } from '@/config';
 
 export const authOptions: NextAuthOptions = {
@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
                 throw new Error("No ha presentado sus credenciales.");
             }
             const { username, password } = credentials;
-            const user = await validateUserCredentials(username, password).then((response) => response);
+            const user = await validarCredencialesDeUsuario(username, password).then((response) => response);
 
             if (user[0]) {
               const loggedUser = user[0];
