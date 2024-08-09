@@ -29,7 +29,7 @@ const FormularioPersona = ({ accion, reloadFn }: { accion: string, reloadFn: Fun
             body: JSON.stringify(payload)
         };
 
-        fetch(`/api/personal`, requestOptions).then(async (response) => {
+        fetch(`/api/persona`, requestOptions).then(async (response) => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson && await response.json();
 

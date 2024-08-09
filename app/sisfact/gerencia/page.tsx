@@ -53,7 +53,7 @@ const Gerencia = () => {
         })
             .finally(() => setMostrarFormularioBitacora(false));
 
-        const rest = await fetch(`/api/personal`).then(async (response) => {
+        const rest = await fetch(`/api/persona`).then(async (response) => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson && await response.json();
 

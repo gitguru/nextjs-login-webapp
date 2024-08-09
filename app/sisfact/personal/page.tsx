@@ -18,7 +18,7 @@ const Personal = () => {
     const [error, setError] = useState('');
 
     const fetchData = async (): Promise<void> => {
-        const res = await fetch(`/api/personal`).then(async (response) => {
+        const res = await fetch(`/api/persona`).then(async (response) => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson && await response.json();
 
