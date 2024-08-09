@@ -30,6 +30,7 @@ create table bitacora(
     intentos int
 );
 
+update inventario join compras on inventario.id = compras.id  set inventario.articulo = compras.articulo;
 
 create table inventario(
     id int primary key auto_increment, 

@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
-import { getAll, agregarCompra } from '@/service/compra';
-import Compra from "@/types/compra"
+import { getAll, agregarPersonal } from '@/service/personal';
+import Usuarios from "@/types/gerencia_usuarios"
+import { agregarUsuario } from "@/service/usuar";
 
 
 export async function GET() {
     try {
-        const articulos = await getAll() as Compra[]
+        const usuario = await getAll() as Usuarios[]
         
-        return NextResponse.json(articulos)
+        return NextResponse.json(usuario)
     } catch (error) {
         return NextResponse.json({
             error: error
@@ -16,10 +17,10 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-    const articulo = await req.json() as Compra;
-    const response: any = await agregarCompra(articulo);
+    const usuario = await req.json() as Usuarios;
+    const response: any = await agregarUsuario(usuario);
 
-    console.log('agregarCompra', response)
+    console.log('agregarUsuario', response)
 
     if (response && response?.insertId) {
         return NextResponse.json(response, { status: 201 });

@@ -3,9 +3,9 @@ import { redirect } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Loading } from '@/components/loading';
 import { NavbarComponent } from '@/components/navbar';
-//import { useState } from 'react'
 import React, { useState, useEffect } from "react";
-//import "./styles.css";
+import Compra from '@/types/compra';
+import { FormularioCompras } from '@/components/formulario-compras';
 
 
 const Compras = () => {
@@ -15,13 +15,9 @@ const Compras = () => {
             redirect('/api/auth/signin');
         },
     });
-    const [data, setData] = useState<any[] | null>(null);
+    const [data, setData] = useState<Compra[] | null>(null);
     const [error, setError] = useState('');
-    const [articulo, setarticulo]= useState(''); //estás las hice para ingresar a la base de datos
-    const [cantidad, setCantidad]= useState('');
-    const [precio_compra,SetCompra]= useState('');
-    const [fecha, setFecha ]= useState('');
-    const [talla, setTalla ]= useState('');
+    const [mostrarFormularioCompras, setMostrarFormularioCompras] = useState<boolean>(false);
 
     const fetchData = async (): Promise<void> => {
         const res = await fetch(`/api/compras`).then(async (response) => {
@@ -43,14 +39,19 @@ const Compras = () => {
             console.log(JSON.stringify(error))
             setData(null);
             alert(message);
-        });
+        })
+            .finally(() => setMostrarFormularioCompras(false));
     };
+
+    const mostrarFormularioComprasBtn = () => {
+        setMostrarFormularioCompras(!mostrarFormularioCompras)
+    }
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    
+
 
     if (status === 'loading') {
         return (<Loading />);
@@ -69,32 +70,21 @@ const Compras = () => {
             <NavbarComponent />
             <header className="bg-white shadow">
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Compras</h1>
+                    <div className="relative flex h-16 items-center justify-between">
+                        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Compras</h1>
+                        <button type="button" className="rounded-md bg-black px-10 py-2 text-white" onClick={mostrarFormularioComprasBtn}>Agregar</button>
+                    </div>
                 </div>
             </header>
             <main>
                 <div className="bg-white">
+                    {mostrarFormularioCompras === true &&
+                        <FormularioCompras accion='agregar' reloadFn={fetchData} />
+                    }
+                    
+
                     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:text-center sm:py-24 lg:max-w-7xl lg:px-8">
-                        <h2 className="sr-only">Products</h2>
-                        <label className="text-gray-900" htmlFor="text">Ingrese el articulo</label><br />
-
-                        <input type="text" id="text" className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"></input><br />
-                        <label className="text-gray-900" htmlFor="text">ingrese la cantidad</label><br />
-                        <input type="number" id="number" placeholder="1" className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"></input><br />
-                        <label className="text-gray-900" htmlFor="text">Precio Compra</label><br />
-
-                        <input type="text" id="text" className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"></input><br />
-                        <label className="text-gray-900" htmlFor="text">Fecha</label><br />
-
-                        <input type="date" id="text" className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"></input><br />
-                        <label className="text-gray-900" htmlFor="text">Talla</label><br />
-
-                        <input type="text" id="text" className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"></input><br />
-                        <label className="text-gray-900" htmlFor="text">Precio total</label><br />
-
-                        <input type="text" id="text" className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"></input><br />
-                        <label className="text-gray-900" htmlFor="text">Registro</label><br />
-                       
+                    <label className="text-gray-900" htmlFor="text">Registro</label><br />
                         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -125,7 +115,7 @@ const Compras = () => {
                                 <tbody>
                                     <>
                                         {
-                                             data !== null && data.map((compra: any, index: any) => {
+                                            data !== null && data.map((compra: any, index: any) => {
                                                 return (
                                                     <tr key={compra.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                         <td className="px-6 py-4">
@@ -158,13 +148,11 @@ const Compras = () => {
                                 </tbody>
                             </table>
                         </div>
-                        <button type="submit" className="mt-5 rounded-md bg-black px-10 py-2 text-white">Procesar</button>\u00A0 
-                        <button type="submit" className="mt-5 rounded-md bg-black px-10 py-2 text-white">falta</button>
-                        
-
-                        <span>Contenido aquí</span>
                     </div>
+
+                    <span>Contenido aquí</span>
                 </div>
+
 
             </main >
         </>

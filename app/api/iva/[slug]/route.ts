@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCompra } from '@/service/compra';
-import Compra from "@/types/compra";
+import { getIva } from '@/service/iva';
+import Iva from "@/types/iva";
 
 export async function GET(
     request:  NextRequest,
@@ -9,8 +9,8 @@ export async function GET(
     const slug = params.slug // id de artículo
     
     try {
-        const articulo = await getCompra(Number(slug)) as Compra
-        return NextResponse.json(articulo)
+        const iva = await getIva(Number(slug)) as Iva
+        return NextResponse.json(iva)
     } catch (error) {
         return NextResponse.json({
             error: error

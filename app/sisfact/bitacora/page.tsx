@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { Loading } from '@/components/loading';
 import { NavbarComponent } from '@/components/navbar';
 
-const Personal = () => {
+const bitacora = () => {
     const { data: session, status } = useSession({
         required: true,
         onUnauthenticated() {
@@ -18,7 +18,7 @@ const Personal = () => {
     const [error, setError] = useState('');
 
     const fetchData = async (): Promise<void> => {
-        const res = await fetch(`/api/personal`).then(async (response) => {
+        const res = await fetch(`/api/bitacora`).then(async (response) => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson && await response.json();
 
@@ -51,18 +51,15 @@ const Personal = () => {
         if (session?.user?.tipo !== 1) {
             console.log('Usuario no pertenece al grupo de gerencia!')
             redirect('/sisfact')
-            
         }
     }//aca me valida que usuario tiene acceso y cual no
-
-    
 
     return (
         <>
             <NavbarComponent />
             <header className="bg-white shadow">
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Personal</h1>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Bitacora</h1>
                 </div>
             </header>
             <main>
@@ -78,19 +75,19 @@ const Personal = () => {
                                             ID
                                         </th>
                                         <th scope="col" className="px-6 py-3">
-                                            Nombre
+                                            Ingreso
                                         </th>
                                         <th scope="col" className="px-6 py-3">
-                                            Primer apellido
+                                            Hora
                                         </th>
                                         <th scope="col" className="px-6 py-3">
-                                            Segundo apellido
+                                            Fecha
                                         </th>
                                         <th scope="col" className="px-6 py-3">
-                                            Puesto
+                                            Usuario
                                         </th>
                                         <th scope="col" className="px-6 py-3">
-                                            Cedula
+                                            Intentos
                                         </th>
                                         <th scope="col" className="px-6 py-3">
                                             <span className="sr-only">Editar</span>
@@ -100,26 +97,26 @@ const Personal = () => {
                                 <tbody>
                                     <>
                                         {
-                                            data !== null && data.map((personal: any, index: any) => {
+                                            data !== null && data.map((bitacora: any, index: any) => {
                                                 return (
-                                                    <tr key={personal.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                    <tr key={bitacora.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                         <td className="px-6 py-4">
-                                                            {personal.id}
+                                                            {bitacora.id}
                                                         </td>
                                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                            {personal.nombre}
+                                                            {bitacora.ingreso}
                                                         </th>
                                                         <td className="px-6 py-4">
-                                                            {personal.apellido1}
+                                                            {bitacora.hora}
                                                         </td>
                                                         <td className="px-6 py-4">
-                                                            {personal.apellido2}
+                                                            {bitacora.fecha}
                                                         </td>
                                                         <td className="px-6 py-4">
-                                                            {personal.puesto}
+                                                            {bitacora.usuario}
                                                         </td>
                                                         <td className="px-6 py-4">
-                                                            {personal.cedula}
+                                                            {bitacora.intentos}
                                                         </td>
                                                         <td className="px-6 py-4 text-right">
                                                             <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
@@ -139,4 +136,4 @@ const Personal = () => {
     );
 };
 
-export default Personal;
+export default bitacora;

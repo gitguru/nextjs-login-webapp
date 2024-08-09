@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCompra } from '@/service/compra';
-import Compra from "@/types/compra";
+import { getUsu } from '@/service/usuar';
+import Usuarios from "@/types/gerencia_usuarios";
 
 export async function GET(
     request:  NextRequest,
@@ -9,8 +9,8 @@ export async function GET(
     const slug = params.slug // id de artículo
     
     try {
-        const articulo = await getCompra(Number(slug)) as Compra
-        return NextResponse.json(articulo)
+        const persona = await getUsu(Number(slug)) as Usuarios
+        return NextResponse.json(persona)
     } catch (error) {
         return NextResponse.json({
             error: error

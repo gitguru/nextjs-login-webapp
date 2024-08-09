@@ -68,7 +68,7 @@ const Ventas = () => {
                         <label className="text-gray-900" htmlFor="text">Vuelto</label><br />
                         <input type="text" id="text" className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"></input><br />
                        
-                        <button type="submit" className="mt-5 rounded-md bg-black px-10 py-2 text-white">Realizar Venta</button>
+                        <button type="submit" className="mt-5 rounded-md bg-black px-10 py-2 text-white">Facturar</button>
 
 
                         <span>Contenido aquí</span>

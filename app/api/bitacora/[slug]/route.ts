@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCompra } from '@/service/compra';
-import Compra from "@/types/compra";
+import { getBita } from '@/service/bitacora';
+
 
 export async function GET(
     request:  NextRequest,
     { params }: { params: { slug: string } }
 ) {
-    const slug = params.slug // id de artículo
+    const slug = params.slug // user id
     
     try {
-        const articulo = await getCompra(Number(slug)) as Compra
-        return NextResponse.json(articulo)
+        const bita = await getBita(Number(slug))
+        return NextResponse.json(bita)
     } catch (error) {
         return NextResponse.json({
             error: error
