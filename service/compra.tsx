@@ -1,6 +1,8 @@
 import Inventario from "@/app/sisfact/inventario/page";
 import pool from "@/libs/mysql";
 import Compra from "@/types/compra";
+import Articulo from "@/types/articulo";
+import { actualizarArticulo, getArticulo } from "@/service/inventario";
 
 const getAll = async () => {
     try {
@@ -27,13 +29,22 @@ const getCompra = async (pk: number) => {
     }
 }
 
-const agregarCompra = async (Compra: Compra) => {
+const agregarCompra = async (compra: Compra) => {
     try {
         const db = await pool.getConnection()
         const query = 'insert into compras (articulo, cantidad, precio_compra, fecha, talla) values (?, ?, ?, ?, ?)'
-        const [rows, fields] = await db.execute(query, [Compra.articulo, Compra.cantidad, Compra.precio_compra, Compra.fecha, Compra.talla]) as any
+        const [rows, fields] = await db.execute(query, [compra.articulo, compra.cantidad, compra.precio_compra, compra.fecha, compra.talla]) as any
         db.release()
 
+        const articulo = await getArticulo(compra.codigoArticulo || 0) as Articulo[]
+        if (articulo && articulo.length === 0) {
+            throw Error(`Artículo con el código: ${compra.codigoArticulo} no existe`)
+        }
+        const margen_ganancia = 35
+        articulo[0].cantidad = articulo[0].cantidad + compra.cantidad
+        articulo[0].precio_compra = compra.precio_compra
+        articulo[0].precio_venta = articulo[0].precio_compra / (1 - (margen_ganancia / 100))
+        actualizarArticulo(articulo[0])
 
         console.log('agregarCompra-rows', rows)
         const nuevaCompra = { ...rows }
@@ -42,29 +53,6 @@ const agregarCompra = async (Compra: Compra) => {
         throw error
     }
 }
-const unirCompra = async (Compra: Compra) => {
-    try {
-        const db = await pool.getConnection()
-        const query = 'insert into compras (articulo, cantidad, precio_compra, fecha, talla) values (?, ?, ?, ?, ?)'
-        const [rows, fields] = await db.execute(query, [Compra.articulo, Compra.cantidad, Compra.precio_compra, Compra.fecha, Compra.talla]) as any
-        const query2 = 'insert into inventario (articulo, cantidad, talla, precio_compra) values (?, ?, ?, ?)'
-        const [rows2, fields2] = await db.execute(query, [Compra.articulo, Compra.cantidad, Compra.talla,  Compra.precio_compra]) as any
-       
-        db.release()
 
 
-        console.log('agregarCompra-rows', rows)
-        const nuevaCompra = { ...rows }
-        console.log('agregarInven-rows', rows2)
-        const nuevoInven = { ...rows2 }
-        return nuevaCompra
-        return nuevoInven
-       
-    } catch (error) {
-        throw error
-    }
-}
-
-
-
-export { getAll,getCompra,agregarCompra, unirCompra}
+export { getAll,getCompra,agregarCompra}

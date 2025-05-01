@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 const FormularioIva = ({ accion, reloadFn }: { accion: string, reloadFn: Function }) => {
     const [data, setData] = useState<Iva | null>(null);
     const [error, setError] = useState('');
-    const [iva, setIva] = useState<string>('');
+    const [iva, setIva] = useState<string>('13%');
     const [tipo_cambio, setCambio] = useState<number>(520);
 
    

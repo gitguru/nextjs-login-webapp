@@ -41,7 +41,7 @@ create table inventario(
     precio_venta int
 );
  
- create table ventas(id int primary key auto_increment,articulo varchar(50), fecha date,
+ create table ventas(id int primary key auto_increment,articulo varchar(50), cantidad int, fecha varchar(50),
  metodo_pago varchar(50),precio varchar(50),cajero varchar(50), moneda varchar(50), total int);
  
  create table compras(id int primary key auto_increment, articulo varchar(50), cantidad int, precio_compra int, fecha varchar(50), talla varchar(15));

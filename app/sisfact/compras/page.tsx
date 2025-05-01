@@ -57,11 +57,14 @@ const Compras = () => {
         return (<Loading />);
     } else if (status === 'authenticated') {
         // if (session?.user?.role === UserRole.SERVICE_ACCOUNT) {
-        if (session?.user?.tipo !== 1) {
-            // console.log('Usuario no pertenece al grupo de gerencia!')
-            // redirect('/sisfact')
+        if (session?.user?.tipo !== 1 ) {
+             console.log('Usuario no pertenece al grupo de gerencia!')
+             redirect('/sisfact')
         }
+        
+        
     }
+    
 
 
 

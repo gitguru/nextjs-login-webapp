@@ -2,6 +2,7 @@ import Articulo from "@/types/articulo";
 import React, { useState, useEffect } from "react";
 
 const FormularioArticulo = ({ accion, reloadFn }: { accion: string, reloadFn: Function }) => {
+    const [error, setError] = useState('');
     const [data, setData] = useState<Articulo | null>(null);
     const [articulo, setArticulo] = useState<string>('');
     const [cantidad, setCantidad] = useState<number>(1);

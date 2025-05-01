@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getArticulo } from '@/service/inventario';
-import Articulo from "@/types/articulo";
+import { getVenta } from '@/service/ventas';
+import Ventas from "@/types/ventas";
 
 export async function GET(
     request:  NextRequest,
@@ -9,10 +9,7 @@ export async function GET(
     const slug = params.slug // id de artículo
     
     try {
-        const articulo = await getArticulo(Number(slug)) as Articulo[]
-        if (articulo && articulo.length === 0) {
-            return NextResponse.json({error: `Artículo con el código: ${slug} no existe`}, { status: 404})
-        }
+        const articulo = await getVenta(Number(slug)) as Ventas
         return NextResponse.json(articulo)
     } catch (error) {
         return NextResponse.json({

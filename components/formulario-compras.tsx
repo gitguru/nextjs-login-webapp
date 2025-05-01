@@ -1,26 +1,29 @@
 import Compras from "@/types/compra";
+import Articulo from "@/types/articulo";
+import { ErrorAlert } from "./error-alert";
 import React, { useState, useEffect } from "react";
 
 
 const FormularioCompras = ({ accion, reloadFn }: { accion: string, reloadFn: Function }) => {
+    const [error, setError] = useState('');
     const [data, setData] = useState<Compras | null>(null);
+    const [codigoArticulo, setCodigotArticulo] = useState<number>(0);
     const [articulo, setArticulo] = useState<string>('');
     const [cantidad, setCantidad] = useState<number>(1);
     const [precioCompra, setPrecioCompra] = useState<number>(0);
     const [fecha, setFecha] = useState<string>('');
-    const [talla, setTalla] = useState<number>(0);
+    const [talla, setTalla] = useState<string>('');
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
         const payload = {
+            codigoArticulo: codigoArticulo,
             articulo: articulo,
             cantidad: cantidad,
             precio_compra: precioCompra,
             fecha: fecha,
             talla: talla,
-
-
         };
 
         const requestOptions = {
@@ -47,10 +50,53 @@ const FormularioCompras = ({ accion, reloadFn }: { accion: string, reloadFn: Fun
         });
     };
 
+    const fetchArticulo = async () => {
+        fetch(`/api/inventario/${codigoArticulo}`).then(async (response) => {
+            const isJson = response.headers.get('content-type')?.includes('application/json');
+            const data = isJson && await response.json();
+
+            // check for error response
+            if (response.ok) {
+                // console.log(data)
+                const art = data[0] as Articulo
+                setArticulo(art.articulo)
+                setPrecioCompra(art.precio_compra)
+            } else {
+                setArticulo('')
+                setPrecioCompra(0)
+                // get error message from body or default to response status
+                const error = (data && data.error) || response.status;
+                return Promise.reject(error);
+            }
+        }).catch((error) => {
+            setError(error);
+        });
+    }
+
     return (
         <>
             <div>
                 <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
+                    <div className="grid md:grid-cols-2 md:gap-6">
+                        <div className="relative z-0 w-full mb-5 group">
+                            <input
+                                type="text"
+                                name="codigo_articulo"
+                                id="codigo_articulo"
+                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-gray-800 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " required
+                                value={codigoArticulo} 
+                                onChange={(e) => setCodigotArticulo(Number(e.target.value))}
+                            />
+                            <label htmlFor="codigo_articulo" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Código Artículo</label>
+                        </div>
+                        <button 
+                            type="button" 
+                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            onClick={fetchArticulo}>
+                                Buscar
+                            </button>
+                    </div>
                     <div className="relative z-0 w-full mb-5 group">
                         <input
                             type="text"
@@ -58,7 +104,8 @@ const FormularioCompras = ({ accion, reloadFn }: { accion: string, reloadFn: Fun
                             id="floating_articulo"
                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-gray-800 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" " required
-                            value={articulo} onChange={(e) => setArticulo(e.target.value)} />
+                            value={articulo} onChange={(e) => setArticulo(e.target.value)}
+                            readOnly />
                         <label htmlFor="floating_articulo" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Ingrese el Artículo</label>
                     </div>
                     <div className="grid md:grid-cols-2 md:gap-6">
@@ -95,6 +142,7 @@ const FormularioCompras = ({ accion, reloadFn }: { accion: string, reloadFn: Fun
                                 placeholder=" " required
                                 value={fecha} onChange={(e) => setFecha(e.target.value)} />
                             <label htmlFor="floating_fecha" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Fecha</label>
+                            
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input
@@ -103,15 +151,19 @@ const FormularioCompras = ({ accion, reloadFn }: { accion: string, reloadFn: Fun
                                 id="floating_talla"
                                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-gray-800 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " required
-                                value={talla} onChange={(e) => setTalla(Number(e.target.value))} />
+                                value={talla} onChange={(e) => setTalla((e.target.value))} />
                             <label htmlFor="floating_talla" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Talla</label>
                         </div>
                     </div>
-                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
-
-
+                    <button 
+                        type="submit" 
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        hidden={error !== ''}
+                        >Guardar
+                    </button>
+                    <ErrorAlert error={error} setError={setError} />
                 </form>
-
+                
             </div>
         </>
     );
