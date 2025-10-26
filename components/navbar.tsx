@@ -19,6 +19,7 @@ export const NavbarComponent = () => {
         { name: 'Inventario', href: '/sisfact/inventario', current: pathname.startsWith('/sisfact/inventario') },
         { name: 'Ventas', href: '/sisfact/ventas', current: pathname.startsWith('/sisfact/ventas') },
         { name: 'Personal', href: '/sisfact/personal', current: pathname.startsWith('/sisfact/personal') },
+        { name: 'informe', href:'', current: pathname.startsWith('') },
         
     ]
     
